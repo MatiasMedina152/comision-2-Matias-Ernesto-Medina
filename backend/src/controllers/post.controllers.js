@@ -1,39 +1,62 @@
-import { posts } from "../models/post.model.js"
+import { postModel } from "../models/post.model.js"
+import { validationResult } from "express-validator"
 
-export const ctrGetlAllPosts = (req, res, next) => {
-    
-   try {
+export const verificarValidaciones = (req, res, next) => {
+    const errors = validationResult(req);
 
-    if(posts.length < 1){
-
-        return res.status(204).json(posts)
+    if(!errors.isEmpty()) {
+        return res.status(400).json(errors)
     }
 
+    next();
+};
+export const ctrGetlAllPosts = (req, res, next) => {
+    
+    const listOfPosts = postModel.findAll()
 
-    res.status(200).json(posts)
-   } catch (error) {
-    next("No hay posts")
-   }
+    res.json(listOfPosts);
 }
 
 export const ctrlCreatePost =(req,res) => {
+    
+    const{ title, desc,image} = req.body
 
-    const{ title, desc, image} = req.body
-
-   const newPost = {title,desc,image}
-   posts.push(newPost)
+    postModel.create({title , desc , image});
 
    res.sendStatus(201)
 }
 
-export const ctrlPatch =  (req,res) => {
-    res.statusCode(201).send("PATCH")
+export const ctrlGetPostById = (req,res) => {
+    
+    const {postId} = req.params;
+    
+    const post = postModel.findOne({id:postId});
+
+    if(!post) {
+        return res.sendStatus(404);
+    }
+
+    res.json(post);
 }
 
-export const ctrlPut = (req,res) => {
-    res.send("PUT")
+export const ctrlUpdatePost = (req, res) =>{
+
+    const{postId} = req.params
+
+    const {title,desc,image} = req.body
+
+    const updatedPost = postModel.update(postId, {title, desc, image}); 
+
+    if(!updatedPost) return res.sendStatus(404);
+
+    res.sendStatus(200);
 }
 
-export const ctrlDelete = (req,res) => {
-    res.send("DELETE")
-}
+export const ctrlDeletePost = (req, res) => {
+
+    const {postId} = req.params;
+
+    postModel.destroy({id:postId})
+
+    res.sendStatus(200);
+} 

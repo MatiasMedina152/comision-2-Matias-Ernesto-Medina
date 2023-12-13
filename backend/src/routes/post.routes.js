@@ -1,17 +1,21 @@
 import { Router} from "express"
-import { ctrGetlAllPosts, ctrlCreatePost } from "../controllers/post.controllers.js"
-import { handlerException } from "../middlewares/handler-exceptions.js"
+import { ctrGetlAllPosts, ctrlCreatePost, ctrlGetPostById, verificarValidaciones,ctrlUpdatePost,ctrlDeletePost } from "../controllers/post.controllers.js"
+import {createPostValidations} from "../validations/create.post.validations.js"
+import { findPostValidation } from "../validations/find.post.validation.js"
+import { updatePostValidation } from "../validations/update.post.validation.js"
+ 
+
 
 const postRouter = Router()
 
-postRouter.get('/', ctrGetlAllPosts,handlerException )
+postRouter.get('/', ctrGetlAllPosts )
 
-postRouter.post('/', ctrlCreatePost )
-/*
-postRouter.patch('/', ctrlPatch)
+postRouter.get('/:postId',findPostValidation,verificarValidaciones,ctrlGetPostById)
 
-postRouter.put('/', ctrlPut)
+postRouter.post('/',createPostValidations, verificarValidaciones, ctrlCreatePost )
 
-postRouter.delete('/', ctrlDelete )
-*/
+postRouter.patch("/:postId",updatePostValidation,verificarValidaciones,ctrlUpdatePost) 
+
+postRouter.delete("/:postId",findPostValidation,verificarValidaciones,ctrlDeletePost)
+ 
 export {postRouter}; 
