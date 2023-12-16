@@ -1,6 +1,8 @@
+import {v4 as uuid} from "uuid"
+
 let listOfPosts = [
     {
-        id:Date.now(),
+        id:uuid(),
         title:"TANQUE",
         desc:"MAIN BATTLE TANK LEOPARD2A8",
         image:"https://imgs.search.brave.com/WYlDDfSjiSkxn-XT79a2XIBVWRdILAtNQ5o5fST1Y-w/rs:fit:860:0:0/g:ce/aHR0cDovL2JveDU0/NjMudGVtcC5kb21h/aW5zL35tb21vZ2J0/Yy9taWxpdGFyeWJs/b2cvd3AtY29udGVu/dC91cGxvYWRzLzIw/MjMvMDcvTGVvcGFy/ZC0yQTdBMS1mb3Rv/LTEtMS0xMDI0eDU3/Ni5qcGc"
@@ -12,7 +14,7 @@ const createNewPost = ({title,desc,image}) => {
 
     if(!title) return null
 
-    const newPost = {id:Date.now(),title,desc,image}
+    const newPost = {id:uuid(),title,desc,image}
     
     listOfPosts.push(newPost);
 

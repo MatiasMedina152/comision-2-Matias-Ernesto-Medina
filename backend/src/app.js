@@ -1,9 +1,17 @@
-import  express  from "express"
-import cors from "cors"
-import helmet from "helmet"
-import { postRouter } from "./routes/post.routes.js";
+import  express  from "express";
+import cors from "cors";
+import helmet from "helmet";
+
+
 
 import { env } from "./settings/config.js";
+import { authorizationMiddleware } from "./middlewares/authorization.middleware.js";
+import {authenticationMiddleware} from "./middlewares/authentication.middleware.js"
+import { postRouter } from "./routes/post.routes.js";
+import { userRouter } from "./routes/user.routes.js";
+import { startConnection } from "./settings/dataBase.js";
+
+
 
 const app = express()
 
@@ -11,18 +19,17 @@ const app = express()
 // Para que ande el body
 app.use(express.json());
 
-app.use(cors())
-app.use(helmet())
+app.use(cors());
+app.use(helmet());
 
 
+app.use("/posts",authenticationMiddleware,authorizationMiddleware,postRouter);
 
-// validacion personalizada 
-//app.use(validarPost);
+app.use("/users",userRouter) 
 
-app.use("/posts",postRouter)
- 
 
-app.listen(env.PORT,() =>{
+app.listen(env.PORT, async() =>{
+   await startConnection() 
     console.log(`server on port ${env.PORT}`)
 });
 

@@ -10,18 +10,18 @@ export const verificarValidaciones = (req, res, next) => {
 
     next();
 };
-export const ctrGetlAllPosts = (req, res, next) => {
+export const ctrGetlAllPosts = (req, res,) => {
     
     const listOfPosts = postModel.findAll()
-
+    
     res.json(listOfPosts);
 }
 
-export const ctrlCreatePost =(req,res) => {
+export const ctrlCreatePost = (req,res) => {
     
     const{ title, desc,image} = req.body
 
-    postModel.create({title , desc , image});
+     postModel.create({title , desc , image});
 
    res.sendStatus(201)
 }
